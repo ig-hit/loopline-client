@@ -4,7 +4,7 @@ import * as localStorage from './local-storage-service';
 
 let articles: Article[] = localStorage.get<Article[]>('articles') || [];
 
-const TIMEOUT = 750;
+const TIMEOUT = 0;
 
 export function loadArticles(): Promise<Article[]> {
   return new Promise((resolve, reject) => {
@@ -23,20 +23,20 @@ export function createArticle(article: Article): Promise<Article[]> {
   });
 }
 
-export function updateArticle(article: Article): Promise<Article[]> {
+export function updateArticle(article: Article): Promise<Article> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       articles = articles.map(i => (i.id === article.id ? article : i));
-      resolve(articles);
+      //resolve(articles);
     }, TIMEOUT);
   });
 }
 
-export function deleteArticle(article: Article): Promise<Article[]> {
+export function deleteArticle(article: Article): Promise<Article> {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       articles = articles.filter(i => i.id !== article.id);
-      resolve(articles);
+      //resolve(articles);
     }, TIMEOUT);
   });
 }

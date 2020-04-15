@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  backend:
+    image: igdoc/loopline-backend
+    ports:
+      - 127.0.0.1:64567:64567
+
+  client:
+    build: .
+    network_mode: host
+    depends_on:
+      - backend
+    ports:
+      - 127.0.0.1:3000:3000
+    volumes:
+      - ./:/usr/src/app

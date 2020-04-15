@@ -18,13 +18,16 @@ const Main: FC<Props> = ({ children, renderActionsMenu }) => (
         justify="space-between"
         style={{ padding: '0 60px' }}
       >
-        <FlexRow align="center">
+        <FlexRow align="center" className="top-menu">
           <img src={logo} className="App-logo" alt="logo" />
           <Link className="App-link" to="/">
-            Demo App
+            Notebook App
           </Link>
+          <div className="top-actions">
+            {renderActionsMenu && renderActionsMenu()}
+          </div>
         </FlexRow>
-        {renderActionsMenu && renderActionsMenu()}
+
       </FlexRow>
     </header>
     <main className="App-main">{children}</main>

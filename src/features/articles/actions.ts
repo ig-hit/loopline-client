@@ -1,4 +1,4 @@
-import { Article } from 'MyModels';
+import {Article} from 'MyModels';
 import { createAsyncAction } from 'typesafe-actions';
 
 export const loadArticlesAsync = createAsyncAction(

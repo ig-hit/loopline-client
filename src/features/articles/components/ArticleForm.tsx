@@ -4,10 +4,9 @@ import { Form, FormikProps, Field, withFormik, ErrorMessage } from 'formik';
 import { Article } from 'MyModels';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { push } from 'connected-react-router';
 
-import { createArticleAsync, updateArticleAsync } from '../actions';
-// import { getPath } from '../../../router-paths';
+import {createArticleAsync, updateArticleAsync} from '../actions';
+import {push} from "connected-react-router";
 
 type FormValues = Pick<Article, 'title' | 'content'> & {};
 
@@ -31,37 +30,41 @@ type Props = typeof dispatchProps & {
 const InnerForm: React.FC<Props & FormikProps<FormValues>> = props => {
   const { isSubmitting, dirty } = props;
   return (
-    <Form>
-      <div>
-        <label htmlFor="title">Title</label>
+    <Form className="notebook-form">
+      <div className="form-group row">
+        <label htmlFor="title" className="col-sm-2 col-form-label col-form-label-lg">Title</label>
         <br />
         <Field
           name="title"
           placeholder="Title"
           component="input"
           type="text"
+          className="form-control notebook-field form-control-lg"
           required
           autoFocus
         />
         <ErrorMessage name="title" />
       </div>
 
-      <div>
-        <label htmlFor="title">Content</label>
+      <div className="form-group row">
+        <label htmlFor="title" className="col-sm-2 col-form-label col-form-label-lg">Text</label>
         <br />
         <Field
           name="content"
-          placeholder="Article content"
+          placeholder="Notebook content"
           component="textarea"
-          required
+          className="form-control form-control-lg notebook-field"
+          rows="6"
+          cols="30"
           type="text"
         />
         <ErrorMessage name="content" />
       </div>
 
-      <button type="submit" disabled={!dirty || isSubmitting}>
-        Submit
+      <button type="submit" className="btn btn-lg btn-primary" disabled={!dirty || isSubmitting}>
+        Save
       </button>
+
     </Form>
   );
 };

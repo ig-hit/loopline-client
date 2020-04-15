@@ -1,30 +1,46 @@
-import { RootState } from 'MyTypes';
 import React from 'react';
 import { match } from 'react-router';
-
 import ArticleForm from '../features/articles/components/ArticleForm';
 import Main from '../layouts/Main';
 import BackLink from '../components/BackLink';
-import { connect } from 'react-redux';
+import {Article} from "MyModels";
+import {get} from "../services/notebooks-api-client";
 
 type OwnProps = {
   match: match<{ articleId: string }>;
 };
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
-  article: state.articles.articles.find(
-    i => i.id === ownProps.match.params.articleId
-  ),
-});
+interface State {
+  article?: Article;
+}
 
-type Props = ReturnType<typeof mapStateToProps>;
+class EditArticle extends React.Component<OwnProps, State> {
+  constructor(props: OwnProps) {
+    super(props);
+    this.state = {}
+  }
+  componentDidMount(): void {
+    const { match: { params } } = this.props;
+    const articleId = params.articleId;
+    get(articleId)
+      .then(article => this.setState({article}))
+      .catch(err => {
 
-const EditArticle = ({ article }: Props) => {
-  return (
-    <Main renderActionsMenu={() => <BackLink />}>
-      <ArticleForm article={article} />
-    </Main>
-  );
-};
+      });
+  }
 
-export default connect(mapStateToProps)(EditArticle);
+  render() {
+    const article = this.state.article;
+    if (!article) {
+      return ''
+    }
+
+    return (
+      <Main renderActionsMenu={() => <BackLink />}>
+        <ArticleForm article={article} />
+      </Main>
+    );
+  }
+}
+
+export default EditArticle;

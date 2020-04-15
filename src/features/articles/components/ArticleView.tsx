@@ -8,10 +8,10 @@ type Props = {
 
 const ArticleView: React.FC<Props> = ({ article }) => {
   return (
-    <div>
-      <h3>{article.title}</h3>
-
-      <p>{article.content}</p>
+    <div className="view jumbotron">
+      <h1 className="display-6">{article.title}</h1>
+      <hr className="my-4"/>
+        <p>{article.content}</p>
     </div>
   );
 };

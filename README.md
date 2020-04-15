@@ -1,3 +1,18 @@
+Loopline application.
+
+Forked from existing repo and modified to suit the the requirements.
+
+RUN:
+```
+docker-compose build
+docker-compose up
+```
+and open browser at: [http://127.0.0.1:3000](http://127.0.0.1:3000)
+
+
+**Original description kept below:**
+
+
 <div align="center">
 
 # React, Redux, TypeScript - RealWorld App

@@ -1,53 +1,51 @@
-import { RootState } from 'MyTypes';
 import React from 'react';
-import { connect } from 'react-redux';
-
-import * as selectors from '../selectors';
 
 import ArticleListItem from './ArticleListItem';
+import {Article} from "MyModels";
+import {load} from '../../../services/notebooks-api-client';
+import store from '../../../store';
+import {push} from "connected-react-router";
 
-const mapStateToProps = (state: RootState) => ({
-  isLoading: state.articles.isLoadingArticles,
-  articles: selectors.getArticles(state),
-});
-const dispatchProps = {};
+interface State {
+  articles?: Article[];
+}
 
-type Props = ReturnType<typeof mapStateToProps> & typeof dispatchProps;
+type OwnProps = {};
 
-const ArticleList: React.FC<Props> = ({
-  isLoading,
-  articles: articles = [],
-}) => {
-  if (isLoading) {
-    return <p style={{ textAlign: 'center' }}>Loading articles...</p>;
+class ArticleList extends React.Component<OwnProps, State> {
+  constructor(props: OwnProps) {
+    super(props);
+    this.state = {}
   }
 
-  if (articles.length === 0) {
+  componentDidMount(): void {
+    const token = store.getState().notebooks.user.token;
+    if (!token) {
+      push('/register');
+      return;
+    }
+    load()
+      .then((articles: Article[]) => this.setState({articles}));
+  }
+
+  render() {
+    const articles = this.state.articles;
+    if (!articles) {
+      return (
+        <h1 style={{ textAlign: 'center' }}>
+          No notebooks yet
+        </h1>
+      );
+    }
     return (
-      <p style={{ textAlign: 'center' }}>
-        No articles yet, please create new...
-      </p>
+      <table className="notebook-listing table table-striped">
+        <tbody>
+        {articles.map((article, num) => (
+          <ArticleListItem key={num} article={article}/>
+        ))}
+        </tbody>
+      </table>
     );
   }
-
-  return (
-    <ul style={getStyle()}>
-      {articles.map(article => (
-        <li key={article.id}>
-          <ArticleListItem article={article} />
-        </li>
-      ))}
-    </ul>
-  );
-};
-
-const getStyle = (): React.CSSProperties => ({
-  textAlign: 'left',
-  margin: 'auto',
-  maxWidth: 500,
-});
-
-export default connect(
-  mapStateToProps,
-  dispatchProps
-)(ArticleList);
+}
+export default ArticleList;

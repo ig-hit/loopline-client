@@ -1,11 +1,9 @@
 import { Article } from 'MyModels';
 import React from 'react';
-import areEqual from 'fast-deep-equal';
 import { connect } from 'react-redux';
 
 import { deleteArticleAsync } from '../actions';
 import { getPath } from '../../../router-paths';
-import FlexRow from '../../../components/FlexRow';
 import { Link } from 'react-router-dom';
 
 const dispatchProps = {
@@ -16,29 +14,30 @@ type Props = typeof dispatchProps & {
   article: Article;
 };
 
-const ArticleListItem = React.memo<Props>(({ article, deleteArticle }) => {
+const ArticleListItem = (({ article, deleteArticle }: Props) => {
   return (
-    <FlexRow>
-      <div style={getStyle()}>{article.title}</div>
-      <FlexRow itemsSpacing={20}>
-        <Link to={getPath('viewArticle', article.id)}>View</Link>
-        <Link to={getPath('editArticle', article.id)}>Edit</Link>
-        <div
-          className="link"
-          onClick={() => deleteArticle(article)}
-          style={{ color: 'darkred' }}
-        >
-          Delete
-        </div>
-      </FlexRow>
-    </FlexRow>
+      <tr>
+          <td>
+            <Link to={getPath('viewArticle', article.id)}>
+              <i className="action-icon fas fa-eye" title="View"/>
+            </Link>
+          </td>
+          <td>
+              <Link to={getPath('editArticle', article.id)}>
+                <i className="action-icon fas fa-edit" title="Edit"/>
+              </Link>
+          </td>
+          <td>
+            <Link to="#" onClick={() => {
+              deleteArticle(article);
+              window.location.reload();
+            }}>
+              <i className="action-icon red fas fa-trash-alt" title="Remove"/>
+            </Link>
+          </td>
+          <td>{article.title}</td>
+      </tr>
   );
-}, areEqual);
-
-const getStyle = (): React.CSSProperties => ({
-  overflowX: 'hidden',
-  textOverflow: 'ellipsis',
-  width: '300px',
 });
 
 export default connect(
